@@ -21,7 +21,7 @@
 #include <k2g.h>
 #include <signal.h>
 #include <utils.hpp>
-
+#include <tf2_ros/transform_broadcaster.h>
 
 pcl::PointCloud<PointT>::ConstPtr prev_cloud;
 pcl::PointCloud<PointT> cloud_store;
@@ -130,6 +130,9 @@ main (int argc, char **argv)
     ros::NodeHandle *nh;
     ros::Subscriber sub;
     ros::Publisher clusterPub, normalPub, planePub,msgPub;
+   
+  
+
 
     bool spawnObject = true;
 
@@ -141,6 +144,7 @@ main (int argc, char **argv)
     std::cout << "ros node initialized" << std::endl;
     ros::init(argc, argv, "hlpr_single_plane_segmentation",ros::init_options::NoSigintHandler);
     nh = new ros::NodeHandle("~");
+    static tf2_ros::TransformBroadcaster br;
     // nh->getParam("segmentation/viz", viz_);
     // std::cout<<"viz is set to " << viz_ << endl;
 
@@ -268,6 +272,50 @@ main (int argc, char **argv)
                     pcl::toPCLPointCloud2(clusters[i], tmp);
                     pcl_conversions::fromPCL(tmp, out);
                     msg.clusters.push_back(out);
+
+                    float hue = multi_plane_app.getColor(clusters[i]);
+                    std::cout << "cluster" << i << ":" << endl;
+                    std::cout << "  size:" << clusters[i].size() << endl;
+                    std::cout << "  hue:" << hue << std::endl;
+                    Eigen::Vector3f pos = multi_plane_app.getPosition(clusters[i]);
+                    std::cout << "  position:" <<pos[0] <<"," << pos[1] <<"," << pos[2] << std::endl;
+
+                    if( hue > 235 && hue < 245) //purple cup
+                    {
+                        geometry_msgs::TransformStamped transformStamped;
+                        transformStamped.transform.translation =  geometry_msgs::Vector3();
+                        transformStamped.transform.translation.x = pos[0];
+                        transformStamped.transform.translation.y = pos[1];
+                        transformStamped.transform.translation.z = pos[2];
+                        transformStamped.transform.rotation =  geometry_msgs::Quaternion();
+                        transformStamped.transform.rotation.x = 0.0;
+                        transformStamped.transform.rotation.y = 0.0;
+                        transformStamped.transform.rotation.z = 0.0;
+                        transformStamped.transform.rotation.w = 1.0;
+                        transformStamped.header.stamp = ros::Time::now();
+                        //or is it kinect_ir_optical_frame
+                        transformStamped.header.frame_id = "kinect_rgb_optical_frame";
+                        transformStamped.child_frame_id = "purple";
+                        br.sendTransform(transformStamped);
+                    }else if (hue < -500) //black book
+                    {
+                        geometry_msgs::TransformStamped transformStamped;
+                        transformStamped.transform.translation =  geometry_msgs::Vector3();
+                        transformStamped.transform.translation.x = pos[0];
+                        transformStamped.transform.translation.y = pos[1];
+                        transformStamped.transform.translation.z = pos[2];
+                        transformStamped.transform.rotation =  geometry_msgs::Quaternion();
+                        transformStamped.transform.rotation.x = 0.0;
+                        transformStamped.transform.rotation.y = 0.0;
+                        transformStamped.transform.rotation.z = 0.0;
+                        transformStamped.transform.rotation.w = 1.0;
+                        transformStamped.header.stamp = ros::Time::now();
+                        //or is it kinect_ir_optical_frame
+                        transformStamped.header.frame_id = "kinect_rgb_optical_frame";
+                        transformStamped.child_frame_id = "black";
+                        br.sendTransform(transformStamped);
+                    }
+
                 }
 
                 for(int i = 0; i < clusterNormals.size(); i++) {

@@ -117,6 +117,47 @@ public:
   {
     viewer->removeCoordinateSystem();
   }
+  
+  Eigen::Vector3f getPosition(pcl::PointCloud<PointT> &cluster){
+
+    float x = 0.0f;
+    float y = 0.0f;
+    float z = 0.0f;
+    float n = static_cast<float> (cluster.size());
+    for (size_t j = 0; j < n; j++)
+    {
+      x += (float) (cluster[j].x);
+      y += (float) (cluster[j].y);
+      z += (float) (cluster[j].z);
+    }
+    x /= n; y /= n; z /= n;
+
+    Eigen::Vector3f position (x,y,z);
+
+    return position;
+
+  }
+
+
+  float getColor(pcl::PointCloud<PointT> &cluster){
+
+    float r = 0.0f;
+    float g = 0.0f;
+    float b = 0.0f;
+    float n = static_cast<float> (cluster.size());
+    for (size_t j = 0; j < n; j++)
+    {
+      r += (float) (cluster[j].r);
+      g += (float) (cluster[j].g);
+      b += (float) (cluster[j].b);
+    }
+    r /= n; g /= n; b /= n;
+
+    float hue = rgb2hue(r,g,b);
+
+    return hue;
+
+  }
 
   pcl::IntegralImageNormalEstimation<PointT, pcl::Normal> ne;
   pcl::NormalEstimation<PointT, pcl::Normal> norm_est;

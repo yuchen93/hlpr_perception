@@ -32,6 +32,8 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *
  */
+
+
 #include <common.hpp>
 #include <pc_segmentation.hpp>
 
@@ -61,10 +63,10 @@ RansacSinglePlaneSegmentation::removePreviousDataFromScreen (size_t prev_models_
     char name[1024];
     for (size_t i = 0; i < prev_models_size; i++)
     {
-        sprintf (name, "normal_%zu", i);
+        //sprintf (name, "normal_%zu", i);
         viewer->removeShape (name);
 
-        sprintf (name, "plane_%02zu", i);
+        //sprintf (name, "plane_%02zu", i);
         viewer->removePointCloud (name);
     }
 }
@@ -74,7 +76,7 @@ RansacSinglePlaneSegmentation::removePreviousCLustersFromScreen (size_t num_clus
 {
     for (size_t i = 0; i < num_clusters; i++)
     {
-        sprintf (name, "cluster_%lu", i);
+       // sprintf (name, "cluster_%lu", i);
         viewer->removeShape (name);
     }
 }
@@ -276,8 +278,8 @@ RansacSinglePlaneSegmentation::planeExtract(
 
 
     double plane_extract_end = pcl::getTime ();
-    if(verbose)
-        std::cout << "Plane extraction (RANSAC) took " << double (plane_extract_end - plane_extract_start) << std::endl;
+    //if(verbose)
+     //   std::cout << "Plane extraction (RANSAC) took " << double (plane_extract_end - plane_extract_start) << std::endl;
 
     // Estimate normals
     double normal_start = pcl::getTime ();
@@ -287,8 +289,8 @@ RansacSinglePlaneSegmentation::planeExtract(
     norm_est.setRadiusSearch (0.02);
     norm_est.compute (*normal_cloud);
     double normal_end = pcl::getTime ();
-    if(verbose)
-        std::cout << "Normal Estimation (RANSAC) took " << double (normal_end - normal_start) << std::endl;
+    //if(verbose)
+    //    std::cout << "Normal Estimation (RANSAC) took " << double (normal_end - normal_start) << std::endl;
 
     *filtered_cloud = *cloud_filtered;
 
@@ -431,7 +433,10 @@ int RansacSinglePlaneSegmentation::processOnce (
     used_cluster_normals = &cluster_normals;
 
     for(int i = 0; i < clusters.size(); i++) 
+    {
         clustersOut.push_back(clusters[i]);
+       
+    }    
     for(int i = 0; i < cluster_normals.size(); i++)
         clustersOutNormals.push_back(cluster_normals[i]);
 

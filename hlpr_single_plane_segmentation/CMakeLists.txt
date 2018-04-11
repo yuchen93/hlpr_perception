@@ -17,6 +17,7 @@ set(ROS_LIBRARIES /opt/ros/${ROS_DISTRO}/lib/libroscpp.so
 find_package(catkin REQUIRED COMPONENTS
   message_generation
   roscpp
+  rospy
   std_msgs
   geometry_msgs
   sensor_msgs
@@ -26,18 +27,17 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(freenect2 REQUIRED)
 find_package(OpenCV 3 REQUIRED)
 
-#add_message_files(
-#  FILES
-#  SegmentedClusters.msg
-#  ClusterIndex.msg
-#)
+add_service_files(
+  FILES
+  CollectVisualDemo.srv
+)
 
-#generate_messages(
-#  DEPENDENCIES
-#  std_msgs
+generate_messages(
+  DEPENDENCIES
+  std_msgs
 #  geometry_msgs
 #  sensor_msgs
-#)
+)
 
 #generate_dynamic_reconfigure_options(
 #  cfg/segmentation.cfg
@@ -45,7 +45,7 @@ find_package(OpenCV 3 REQUIRED)
 
 catkin_package(
  # CATKIN_DEPENDS dynamic_reconfigure message_runtime roscpp std_msgs geometry_msgs
- # CATKIN_DEPENDS message_runtime roscpp std_msgs geometry_msgs sensor_msgs
+ CATKIN_DEPENDS message_runtime roscpp std_msgs geometry_msgs sensor_msgs
 )
 
 include_directories(${PCL_INCLUDE_DIRS})

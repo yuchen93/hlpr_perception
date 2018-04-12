@@ -23,6 +23,9 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   hlpr_perception_msgs
   pcl_ros
+  tf2_ros
+  tf
+  tf_conversions
 )
 find_package(freenect2 REQUIRED)
 find_package(OpenCV 3 REQUIRED)
@@ -30,12 +33,13 @@ find_package(OpenCV 3 REQUIRED)
 add_service_files(
   FILES
   CollectVisualDemo.srv
+  BroadcastObjectFrames.srv
 )
 
 generate_messages(
   DEPENDENCIES
   std_msgs
-#  geometry_msgs
+  geometry_msgs
 #  sensor_msgs
 )
 

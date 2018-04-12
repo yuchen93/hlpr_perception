@@ -29,11 +29,20 @@ def update_marker_pose(data):
         else:
             markers[marker.id] = curr_pose
 
+def distance(point1, point2):
+    return sqrt((poin1.x-point2.x)**2+(point1.y-point2.y)**2+(point1.z-point2.z)**2)
+
 def construct_world():
+    #             marker4
+    #
+    #
+    #
+    #marker0      marker1
     rospy.sleep(1.0)
     while not (0 in markers and 1 in markers and 4 in markers):
         print "Waiting for markers 0,1 and 4 ..."
-
+    width = distance(markers[0],markers[1])
+    height = distance(markers[1], markers[4])
     print markers[0], markers[1], markers[4]
 
 def collect_visual_demo_server():

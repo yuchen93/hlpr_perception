@@ -115,7 +115,7 @@ RansacSinglePlaneSegmentation::displayPlane(pcl::PointCloud<PointT>::Ptr contour
     size_t bs = 0;
     sprintf(name,"plane_%02zu", bs);
     pcl::visualization::PointCloudColorHandlerCustom <PointT> color2 (contour, 255,62,62);//red[i], grn[i], blu[i]);
-    viewer->addPointCloud (contour, color2, name);
+    //viewer->addPointCloud (contour, color2, name);
 }
 
 
@@ -127,8 +127,8 @@ RansacSinglePlaneSegmentation::initSegmentation(int color_seg, float distance_th
 {
     // configure normal estimation
     ne.setNormalEstimationMethod (ne.COVARIANCE_MATRIX);
-    ne.setMaxDepthChangeFactor (0.025f); //(0.01f);//0.03f
-    ne.setNormalSmoothingSize (20.0f);//15.0f//20.0f
+    ne.setMaxDepthChangeFactor (0.01f); //0.025f (0.01f);//0.03f
+    ne.setNormalSmoothingSize (15.0f);//15.0f//20.0f
 
     // create a euclidean cluster comparator
     switch (color_seg)
@@ -167,10 +167,10 @@ RansacSinglePlaneSegmentation::initSegmentation(int color_seg, float distance_th
     //set up color segmentation
     tree = boost::shared_ptr<pcl::search::Search<PointT> > (new pcl::search::KdTree<PointT>);
 
-    reg.setDistanceThreshold (10); //10
-    reg.setPointColorThreshold (25); //6
-    reg.setRegionColorThreshold (20); //5
-    reg.setMinClusterSize (200); //600
+    reg.setDistanceThreshold (15); //10
+    reg.setPointColorThreshold (50); //6
+    reg.setRegionColorThreshold (100); //5
+    reg.setMinClusterSize (300); //600
     reg.setSearchMethod (tree);
 
     // setup vfh (this is for feature extraction and not for segmentatio, consider moving
@@ -239,7 +239,7 @@ RansacSinglePlaneSegmentation::planeExtract(
 
     pcl::PointCloud<PointT>::Ptr cloud_filtered (new pcl::PointCloud<PointT>);
     pcl::PointCloud<PointT>::Ptr cloud_f (new pcl::PointCloud<PointT>);
-    downSample(filtered_cloud, 0.008f, cloud_filtered);
+    downSample(filtered_cloud, 0.006f, cloud_filtered);
 
 
     int i=0, nr_points = (int) cloud_filtered->points.size ();
@@ -440,8 +440,8 @@ int RansacSinglePlaneSegmentation::processOnce (
     for(int i = 0; i < cluster_normals.size(); i++)
         clustersOutNormals.push_back(cluster_normals[i]);
 
-    if(verbose)
-        std::cout << "Number of clusters of interest: " << used_clusters->size() << std::endl;
+    //if(verbose)
+    //    std::cout << "Number of clusters of interest: " << used_clusters->size() << std::endl;
 
     if(viewer_enabled)
     {
@@ -461,8 +461,8 @@ int RansacSinglePlaneSegmentation::processOnce (
     prev_cluster_num = used_clusters->size();
 
     double end = pcl::getTime();
-    if(verbose)
-        std::cout << "Processing loop took " << double (end - start) << std::endl;
+    //if(verbose)
+    //    std::cout << "Processing loop took " << double (end - start) << std::endl;
 
     return 0;
 }

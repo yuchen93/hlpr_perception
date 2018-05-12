@@ -274,13 +274,65 @@ main (int argc, char **argv)
                     msg.clusters.push_back(out);
 
                     float hue = multi_plane_app.getColor(clusters[i]);
-                    // std::cout << "--  cluster" << i << ":" << endl;
-                    // std::cout << "  --    size :" << clusters[i].size() << endl;
-                    // std::cout << "  --     hue :" << hue << std::endl;
+                     std::cout << "--  cluster" << i << ":" << endl;
+                     std::cout << "  --    size :" << clusters[i].size() << endl;
+                     std::cout << "  --     hue :" << hue << std::endl;
                     Eigen::Vector3f pos = multi_plane_app.getPosition(clusters[i]);
-                    //std::cout << "  position:" <<pos[0] <<"," << pos[1] <<"," << pos[2] << std::endl;
+                    std::cout << "  position:" <<pos[0] <<"," << pos[1] <<"," << pos[2] << std::endl;
 
-                    if( hue < -900 && clusters[i].size() > 600 && clusters[i].size() < 750) //cup
+				if( hue > 340 && hue <370) //red
+				{  
+				  if(  clusters[i].size() > 460  && clusters[i].size() < 550) //bowl
+                    {
+                        geometry_msgs::TransformStamped transformStamped;
+                        transformStamped.transform.translation =  geometry_msgs::Vector3();
+                        transformStamped.transform.translation.x = pos[0];
+                        transformStamped.transform.translation.y = pos[1];
+                        transformStamped.transform.translation.z = pos[2];
+                        transformStamped.transform.rotation =  geometry_msgs::Quaternion();
+                        transformStamped.transform.rotation.x = 0.0;
+                        transformStamped.transform.rotation.y = 0.0;
+                        transformStamped.transform.rotation.z = 0.0;
+                        transformStamped.transform.rotation.w = 1.0;
+                        transformStamped.header.stamp = ros::Time::now();
+                        transformStamped.header.frame_id = "kinect_rgb_optical_frame";
+                        transformStamped.child_frame_id = "bowl";
+                        br.sendTransform(transformStamped);
+                    }/*else  if(  clusters[i].size() > 510  && clusters[i].size() < 580) //mug
+                    {
+                        geometry_msgs::TransformStamped transformStamped;
+                        transformStamped.transform.translation =  geometry_msgs::Vector3();
+                        transformStamped.transform.translation.x = pos[0];
+                        transformStamped.transform.translation.y = pos[1];
+                        transformStamped.transform.translation.z = pos[2];
+                        transformStamped.transform.rotation =  geometry_msgs::Quaternion();
+                        transformStamped.transform.rotation.x = 0.0;
+                        transformStamped.transform.rotation.y = 0.0;
+                        transformStamped.transform.rotation.z = 0.0;
+                        transformStamped.transform.rotation.w = 1.0;
+                        transformStamped.header.stamp = ros::Time::now();
+                        transformStamped.header.frame_id = "kinect_rgb_optical_frame";
+                        transformStamped.child_frame_id = "mug";
+                        br.sendTransform(transformStamped);
+                    }*/else  if(  clusters[i].size() > 2000  && clusters[i].size() < 2500) //plate
+                    {
+                        geometry_msgs::TransformStamped transformStamped;
+                        transformStamped.transform.translation =  geometry_msgs::Vector3();
+                        transformStamped.transform.translation.x = pos[0];
+                        transformStamped.transform.translation.y = pos[1];
+                        transformStamped.transform.translation.z = pos[2];
+                        transformStamped.transform.rotation =  geometry_msgs::Quaternion();
+                        transformStamped.transform.rotation.x = 0.0;
+                        transformStamped.transform.rotation.y = 0.0;
+                        transformStamped.transform.rotation.z = 0.0;
+                        transformStamped.transform.rotation.w = 1.0;
+                        transformStamped.header.stamp = ros::Time::now();
+                        transformStamped.header.frame_id = "kinect_rgb_optical_frame";
+                        transformStamped.child_frame_id = "plate";
+                        br.sendTransform(transformStamped);
+                    }
+                  }  
+                    else if( hue < -900 && clusters[i].size() > 600 && clusters[i].size() < 750) //blue mug
                     {
                         geometry_msgs::TransformStamped transformStamped;
                         transformStamped.transform.translation =  geometry_msgs::Vector3();

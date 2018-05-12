@@ -131,8 +131,8 @@ OpenNIOrganizedMultiPlaneSegmentation::initSegmentation(int color_seg, float dis
 {
   // configure normal estimation
   ne.setNormalEstimationMethod (ne.COVARIANCE_MATRIX);
-  ne.setMaxDepthChangeFactor (0.025f); //(0.01f);//0.03f
-  ne.setNormalSmoothingSize (20.0f);//15.0f//20.0f
+  ne.setMaxDepthChangeFactor (0.05f); //(0.01f);//0.03f
+  ne.setNormalSmoothingSize (10.0f);//15.0f//20.0f
 
   // create a euclidean cluster comparator
 switch (color_seg)
@@ -153,7 +153,7 @@ break;
 
   // configure the multi plane segmentor
   mps.setMinInliers (10000); //(10000);
-  mps.setAngularThreshold (0.017453 * 3.0);// ); //4.5// 3 degrees
+  mps.setAngularThreshold (0.017453 * 2.0);// ); //4.5// 3 degrees
   mps.setDistanceThreshold (0.01); //0.01 in meters
   mps.setMaximumCurvature(1000.005);//0.001
 
@@ -295,6 +295,7 @@ OpenNIOrganizedMultiPlaneSegmentation::segmentPointCloud(pcl::PointCloud<PointT>
   pcl::PointCloud<pcl::Label>::Ptr labels (new pcl::PointCloud<pcl::Label>);
   std::vector<pcl::PointIndices> label_indices;
   std::vector<pcl::PointIndices> boundary_indices;
+  
   planeExtract(filtered_cloud, regions, normal_cloud,model_coefficients,inlier_indices,labels,label_indices,boundary_indices);
 
   unsigned int min_cluster_size = 30;

@@ -274,11 +274,13 @@ main (int argc, char **argv)
                     msg.clusters.push_back(out);
 
                     float hue = multi_plane_app.getColor(clusters[i]);
-                     std::cout << "--  cluster" << i << ":" << endl;
-                     std::cout << "  --    size :" << clusters[i].size() << endl;
-                     std::cout << "  --     hue :" << hue << std::endl;
+                       
+                    // std::cout << "--  cluster" << i << ":" << endl;
+                    // std::cout << "  --    size :" << clusters[i].size() << endl;
+                    // std::cout << "  --     hue :" << hue << std::endl;
+                       
                     Eigen::Vector3f pos = multi_plane_app.getPosition(clusters[i]);
-                    std::cout << "  position:" <<pos[0] <<"," << pos[1] <<"," << pos[2] << std::endl;
+                  //  std::cout << "  position:" <<pos[0] <<"," << pos[1] <<"," << pos[2] << std::endl;
 
 				if( hue > 340 && hue <370) //red
 				{  
@@ -332,7 +334,7 @@ main (int argc, char **argv)
                         br.sendTransform(transformStamped);
                     }
                   }  
-                    else if( hue < -900 && clusters[i].size() > 600 && clusters[i].size() < 750) //blue mug
+                    else if( hue > 190 && hue < 210 && clusters[i].size() > 300 && clusters[i].size() < 350) //blue cup
                     {
                         geometry_msgs::TransformStamped transformStamped;
                         transformStamped.transform.translation =  geometry_msgs::Vector3();
@@ -347,9 +349,9 @@ main (int argc, char **argv)
                         transformStamped.header.stamp = ros::Time::now();
                         //or is it kinect_ir_optical_frame
                         transformStamped.header.frame_id = "kinect_rgb_optical_frame";
-                        transformStamped.child_frame_id = "mug";
+                        transformStamped.child_frame_id = "cup";
                         br.sendTransform(transformStamped);
-                    }else if( hue > 67 and hue < 80){
+                    }else if( hue > 70 && hue < 90 ){
                         geometry_msgs::TransformStamped transformStamped;
                         transformStamped.transform.translation =  geometry_msgs::Vector3();
                         transformStamped.transform.translation.x = pos[0];
@@ -363,7 +365,7 @@ main (int argc, char **argv)
                         transformStamped.header.stamp = ros::Time::now();
                         //or is it kinect_ir_optical_frame
                         transformStamped.header.frame_id = "kinect_rgb_optical_frame";
-                        transformStamped.child_frame_id = "plant";
+                        transformStamped.child_frame_id = "vase";
                         br.sendTransform(transformStamped);
                     }
 
